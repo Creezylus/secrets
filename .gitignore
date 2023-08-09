@@ -1,0 +1,24 @@
+# Ignore compiled output
+*.o
+*.out
+
+# Ignore temporary files
+*.tmp
+*.bak
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+
+# Ignore logs
+*.log
+
+# Ignore dependency folders
+node_modules/
+vendor/
+
+# Ignore sensitive information (example: config files)
+config.ini
+secrets.txt
+
+.DS_Store
