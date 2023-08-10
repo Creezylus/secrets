@@ -22,3 +22,5 @@ config.ini
 secrets.txt
 
 .DS_Store
+
+.env

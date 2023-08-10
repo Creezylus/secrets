@@ -1,11 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import _DB_CLIENT from './Clients/dbClient.js';
+import 'dotenv/config'
 
 const app = express();
 const port = 3000;
 const dbClient = _DB_CLIENT;
 
+/* MIDDLEWARE */
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -34,7 +36,7 @@ app.post("/login", async (req,res) =>{
    
     const loginUserName = req.body.username;
     const loginPassword = req.body.password;
-    const loginResponse = await dbClient.checkLoginCredentials(req.body.username, req.body.password);
+    const loginResponse = await dbClient.checkLoginCredentials(loginUserName, loginPassword);
     console.log(loginResponse);
      if(loginResponse.isLoginSuccessful)
      {
