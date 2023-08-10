@@ -2,6 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import _DB_CLIENT from './Clients/dbClient.js';
 import 'dotenv/config'
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
 
 const app = express();
 const port = 3000;
@@ -27,7 +30,19 @@ app.get("/register", (req,res) =>{
 });
 
 app.post("/register", async (req,res) =>{
-    await dbClient.createNewUser(req.body.username, req.body.password);
+    try
+    {
+        bcrypt.hash(req.body.password,saltRounds, async function(err, hash){
+            console.log("Hash is "+ hash.toString());
+            console.log("err is "+ err);
+            await dbClient.createNewUser(req.body.username, hash.toString());
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    
     res.render('secrets.ejs');
 });
 

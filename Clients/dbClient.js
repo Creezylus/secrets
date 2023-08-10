@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import HTTPResModel from "../Models/model_HTTPRes.js";
 import * as dbModel   from "../Models/Schemas/model_MongooseSchema.js";
+import 'dotenv/config'
+import bcrypt from 'bcrypt';
 
 const defaultConnString = "mongodb://127.0.0.1:27017/secret_userDB";
 
@@ -63,13 +65,22 @@ const _DB_CLIENT = {
             success = 0;
         }
         console.log("IpPass= " + loginPassword);
-        console.log("DbPass " + dbUser.password);
-        
-        if((dbUser.password != loginPassword) && success) 
-        {
-            console.log("pass match");
-            httpResp = new HTTPResModel(401, "Unauthorized. Incorrect Password");
-            success = 0;
+        console.log("dbUser= " + dbUser);
+        if(success) 
+        { 
+               bcrypt.compare(loginPassword, dbUser.password, function (error,response)
+               {
+                    console.log('resp is '+response);
+                    console.log('error is '+error);
+               });
+               /*
+                console.log("match is " + match);
+                if(match === false)
+                {
+                    console.log("pass match");
+                    httpResp = new HTTPResModel(401, "Unauthorized. Incorrect Password");
+                    success = 0;
+                } */
         }
 
         if(success)
