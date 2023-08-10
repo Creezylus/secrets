@@ -24,8 +24,28 @@ app.get("/register", (req,res) =>{
     res.render('register.ejs');
 });
 
-app.post("/register", (req,res) =>{
-    res.render('register.ejs');
+app.post("/register", async (req,res) =>{
+    await dbClient.createNewUser(req.body.username, req.body.password);
+    res.render('secrets.ejs');
+});
+
+app.post("/login", async (req,res) =>{
+    
+   
+    const loginUserName = req.body.username;
+    const loginPassword = req.body.password;
+    const loginResponse = await dbClient.checkLoginCredentials(req.body.username, req.body.password);
+    console.log(loginResponse);
+     if(loginResponse.isLoginSuccessful)
+     {
+        res.render('secrets.ejs');
+     }
+     else
+     {
+        res.render('login.ejs');
+     }
+    
+    
 });
 
 app.listen(port, () =>
