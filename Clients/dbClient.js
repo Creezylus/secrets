@@ -56,7 +56,7 @@ const _DB_CLIENT = {
     async checkLoginCredentials(loginUsername, loginPassword)
     {
         let httpResp;
-        let success = 1;
+        var success = 1;
 
         let dbUser = await dbModel.userModel.findOne({email:loginUsername});
         if(dbModel == null)
@@ -64,26 +64,19 @@ const _DB_CLIENT = {
             httpResp = new HTTPResModel(401, "Unauthorized. No user registered with " + loginUsername);
             success = 0;
         }
-        console.log("IpPass= " + loginPassword);
-        console.log("dbUser= " + dbUser);
+        
         if(success) 
         { 
-               bcrypt.compare(loginPassword, dbUser.password, function (error,response)
-               {
-                    console.log('resp is '+response);
-                    console.log('error is '+error);
-               });
-               /*
-                console.log("match is " + match);
-                if(match === false)
-                {
-                    console.log("pass match");
-                    httpResp = new HTTPResModel(401, "Unauthorized. Incorrect Password");
-                    success = 0;
-                } */
+            let resp = await bcrypt.compare(loginPassword, dbUser.password)
+            if(resp == false) 
+            {
+                console.log('false resdp is '+resp);
+                success = 0;
+                httpResp = new HTTPResModel(401, "Unauthorized. No user registered with " + loginUsername);
+            }
         }
-
-        if(success)
+        
+        if(success == 1)
         {
             httpResp = new HTTPResModel(200,"Success. Login successful");
         }
